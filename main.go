@@ -11,6 +11,12 @@ func hashPassword(password string) string {
 	hash := md5.Sum([]byte(password))
 	return fmt.Sprintf("%x", hash)
 }
+type Auth interface {
+	Register()
+	Login()
+	ForgotPassword()
+	Exit()
+}
 
 type authService struct {
 	Users []data.User
@@ -251,7 +257,9 @@ func (auth *authService) Exit() {
 
 func main() {
 
-	auth := &authService{}
+	service := &authService{}
+
+	var auth Auth = service
 
 	for {
 
@@ -265,7 +273,12 @@ func main() {
 		var menu int
 
 		fmt.Print("Choose Menu : ")
-		fmt.Scan(&menu)
+		_, err := fmt.Scan(&menu)
+		if err != nil {
+			fmt.Println("Input must be number")
+			fmt.Scanln()
+			continue
+		}
 
 		switch menu {
 

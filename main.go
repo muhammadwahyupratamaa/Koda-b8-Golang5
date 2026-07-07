@@ -85,6 +85,40 @@ func (auth *authService) Register() {
 	fmt.Println("Registration canceled")
 }
 
+func (auth *authService) Login() {
+
+	var email string
+	var password string
+
+	fmt.Println("---- Login ----")
+	fmt.Println()
+
+	fmt.Print("Enter your email : ")
+	fmt.Scan(&email)
+
+	fmt.Print("Enter your password : ")
+	fmt.Scan(&password)
+
+	fmt.Println()
+
+	for _, user := range auth.Users {
+
+		if user.Email == email {
+
+			if user.Password == hashPassword(password) {
+
+				fmt.Println("Login Successful!")
+				return
+			}
+
+			fmt.Println("Wrong password")
+			return
+		}
+	}
+
+	fmt.Println("Email not found")
+}
+
 func (auth *authService) Exit() {
 	fmt.Println("GoodBye")
 	os.Exit(0)
@@ -114,7 +148,7 @@ func main() {
 			auth.Register()
 
 		case 2:
-			fmt.Println("Login feature is under development.")
+			auth.Login()
 
 		case 3:
 			fmt.Println("Forgot Password feature is under development.")

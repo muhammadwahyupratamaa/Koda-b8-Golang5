@@ -108,6 +108,7 @@ func (auth *authService) Login() {
 			if user.Password == hashPassword(password) {
 
 				fmt.Println("Login Successful!")
+				auth.Menu(user)
 				return
 			}
 
@@ -173,6 +174,74 @@ func (auth *authService) ForgotPassword() {
 	}
 
 	fmt.Println("Email not found!")
+}
+
+func (auth *authService) ListUsers() {
+
+	fmt.Println("--- List All Users ---")
+
+	for i, user := range auth.Users {
+
+		fmt.Printf("\nUser %d\n", i+1)
+		fmt.Println("Full Name :", user.FirstName, user.LastName)
+		fmt.Println("Email     :", user.Email)
+		fmt.Println("Password  :", user.Password)
+	}
+
+	fmt.Println()
+	fmt.Print("Press Enter to continue...")
+
+	fmt.Scanln()
+	fmt.Scanln()
+}
+
+func (auth *authService) Logout() {
+	fmt.Println("Logout Success")
+}
+
+func (auth *authService) Menu(user data.User) {
+
+	for {
+
+		fmt.Println("--- Welcome to System ---")
+		fmt.Println()
+
+		fmt.Printf("Hello %s\n\n", user.Email)
+
+		fmt.Println("1. List All Users")
+		fmt.Println("2. Logout")
+		fmt.Println()
+		fmt.Println("0. Exit")
+
+		var selectOpt int
+
+		fmt.Print("Choose a menu : ")
+
+		_, err := fmt.Scan(&selectOpt)
+
+		if err != nil {
+
+			fmt.Println("The input must be a number!")
+			fmt.Scanln()
+			continue
+		}
+
+		switch selectOpt {
+
+		case 1:
+			auth.ListUsers()
+
+		case 2:
+			auth.Logout()
+			return
+
+		case 0:
+			auth.Exit()
+
+		default:
+			fmt.Println("Menu not found")
+		}
+	}
 }
 
 func (auth *authService) Exit() {

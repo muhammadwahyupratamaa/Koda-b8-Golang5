@@ -119,6 +119,62 @@ func (auth *authService) Login() {
 	fmt.Println("Email not found")
 }
 
+func (auth *authService) ForgotPassword() {
+
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("Error:", err)
+		}
+	}()
+
+	defer fmt.Println("Leaving Forgot Password")
+
+	var email string
+
+	fmt.Println("---- Forgot Password ----")
+	fmt.Println()
+
+	fmt.Print("Enter your email : ")
+	fmt.Scan(&email)
+
+	fmt.Println()
+
+	if email == "" {
+		panic("Email cannot be empty")
+	}
+
+	for i, user := range auth.Users {
+
+		if user.Email == email {
+
+			var newPassword string
+			var confirmPassword string
+
+			for {
+
+				fmt.Print("Enter new password : ")
+				fmt.Scan(&newPassword)
+
+				fmt.Print("Confirm new password : ")
+				fmt.Scan(&confirmPassword)
+
+				if newPassword == confirmPassword {
+					break
+				}
+
+				fmt.Println("Password doesn't match!")
+			}
+
+			auth.Users[i].Password = hashPassword(newPassword)
+
+			fmt.Println("Password updated successfully!")
+			return
+		}
+	}
+
+	fmt.Println("Email not found!")
+}
+
 func (auth *authService) Exit() {
 	fmt.Println("GoodBye")
 	os.Exit(0)
@@ -151,7 +207,7 @@ func main() {
 			auth.Login()
 
 		case 3:
-			fmt.Println("Forgot Password feature is under development.")
+			auth.ForgotPassword()
 
 		case 0:
 			auth.Exit()

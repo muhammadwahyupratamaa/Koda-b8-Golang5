@@ -33,6 +33,10 @@ jobs:
         name: "Release builded app"
         needs: build-app
         runs-on: ubuntu-latest
+
+        permissions:
+            contents: write
+            
         steps:
             - name: Download artifact
               uses: actions/download-artifact@v5

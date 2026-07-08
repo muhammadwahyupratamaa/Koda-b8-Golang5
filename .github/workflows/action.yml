@@ -21,6 +21,12 @@ jobs:
               uses: actions/checkout@v4
             - name: Download dependencies
               run: go mod tidy
+            - name: build app Linux
+              run: go build -o program-auth-Linux main.go
+            - name: build app windows
+              run: GOOS=windows GOARCH=amd64 go build -o program-auth-windows.exe main.go
+            - name: build app Mac OS
+              run: GOOS=darwin GOARCH=arm64 go build -o program-auth-darwin main.go
             - name: build-app
               run: go build -o auth-app main.go
             - name: Save artifact
